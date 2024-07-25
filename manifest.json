@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Reload Companion",
+  "version": "1.0",
+  "description": "Companion extension for VS Code Auto Reload",
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "webNavigation"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*",
+    "ws://localhost:3000/"
+  ],
+  "icons": {
+    "16": "icon.png"
+  }
+}
