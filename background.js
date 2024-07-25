@@ -1,43 +1,83 @@
 let socket = null;
+let isConnected = false;
+let connectionTimeout = null;
 
 function connectWebSocket() {
-  socket = new WebSocket('ws://localhost:8080');
+  if (socket) {
+    socket.close();
+  }
 
-  socket.onopen = function() {
-    console.log('WebSocket connection established');
-  };
+  return new Promise((resolve, reject) => {
+    socket = new WebSocket("ws://localhost:8080");
 
-  socket.onmessage = function(event) {
-    if (event.data === 'reload') {
-      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-        if (tabs[0]) {
-          // Add a small delay before reloading
-          setTimeout(() => {
-            // Force a cache-clearing reload
-            chrome.tabs.reload(tabs[0].id, { bypassCache: true }, () => {
-              console.log('Page reloaded with cache cleared');
-              // If needed, you can send a message to the content script here
-              chrome.tabs.sendMessage(tabs[0].id, { action: "contentUpdated" });
-            });
-          }, 500); // 500ms delay, adjust as needed
-        }
-      });
-    }
-  };
+    connectionTimeout = setTimeout(() => {
+      if (!isConnected) {
+        reject(
+          new Error(
+            "Connection timeout. Make sure the VS Code extension is running."
+          )
+        );
+      }
+    }, 5000); // 5 seconds timeout
 
-  socket.onerror = function(event) {
-    console.error('WebSocket error:', event);
-    if (event.target.readyState === WebSocket.CLOSED) {
-      console.error('WebSocket is closed. Attempting to reconnect...');
-      setTimeout(connectWebSocket, 5000); // Try to reconnect after 5 seconds
-    }
-  };
+    socket.onopen = function () {
+      console.log("WebSocket connection established");
+      isConnected = true;
+      clearTimeout(connectionTimeout);
+      resolve();
+    };
 
-  socket.onclose = function(event) {
-    console.log('WebSocket connection closed:', event);
-    setTimeout(connectWebSocket, 5000); // Try to reconnect after 5 seconds
-  };
+    socket.onmessage = function (event) {
+      if (event.data === "reload") {
+        chrome.tabs.query(
+          { active: true, currentWindow: true },
+          function (tabs) {
+            if (tabs[0]) {
+              setTimeout(() => {
+                chrome.tabs.reload(tabs[0].id, { bypassCache: true }, () => {
+                  console.log("Page reloaded with cache cleared");
+                  chrome.tabs.sendMessage(tabs[0].id, {
+                    action: "contentUpdated",
+                  });
+                });
+              }, 500);
+            }
+          }
+        );
+      }
+    };
+
+    socket.onerror = function (event) {
+      console.error("WebSocket error:", event);
+      isConnected = false;
+      clearTimeout(connectionTimeout);
+      reject(new Error("Failed to connect to WebSocket server."));
+    };
+
+    socket.onclose = function (event) {
+      console.log("WebSocket connection closed:", event);
+      isConnected = false;
+      clearTimeout(connectionTimeout);
+      reject(new Error("WebSocket connection closed."));
+    };
+  });
 }
 
-// Initial WebSocket connection
-connectWebSocket();
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "start") {
+    connectWebSocket()
+      .then(() => sendResponse({ success: true }))
+      .catch((error) => sendResponse({ error: error.message }));
+    return true; // Indicates that the response is sent asynchronously
+  } else if (message.action === "stop") {
+    if (socket) {
+      socket.close();
+      socket = null;
+    }
+    isConnected = false;
+    sendResponse({ success: true });
+  } else if (message.action === "getStatus") {
+    sendResponse({ isConnected: isConnected });
+  }
+  return true; // Indicates that the response is sent asynchronously
+});

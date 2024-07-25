@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Reload Companion</title>
+    <style>
+        body {
+            width: 300px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        button {
+            width: 48%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #startBtn {
+            background-color: #27ae60;
+            color: white;
+        }
+        #startBtn:hover {
+            background-color: #2ecc71;
+        }
+        #stopBtn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        #stopBtn:hover {
+            background-color: #f13c2e;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        #error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .status {
+            text-align: center;
+            font-size: 14px;
+            color: #34495e;
+            margin-top: 15px;
+        }
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .status-dot.connected {
+            background-color: #27ae60;
+        }
+        .status-dot.disconnected {
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Auto Reload Companion</h1>
+        <div class="button-group">
+            <button id="startBtn">Start</button>
+            <button id="stopBtn">Stop</button>
+        </div>
+        <div id="error"></div>
+        <div class="status">
+            <span class="status-dot disconnected"></span>
+            <span id="statusText">Disconnected</span>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
