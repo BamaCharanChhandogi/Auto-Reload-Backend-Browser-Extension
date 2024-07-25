@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Auto Reload Companion",
+  "name": "Auto Reload Backend",
   "version": "1.0",
   "description": "Companion extension for VS Code Auto Reload",
   "permissions": [
