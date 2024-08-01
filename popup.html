@@ -85,6 +85,13 @@
         .status-dot.disconnected {
             background-color: #e74c3c;
         }
+        .note {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 15px;
+            text-align: center;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -98,6 +105,9 @@
         <div class="status">
             <span class="status-dot disconnected"></span>
             <span id="statusText">Disconnected</span>
+        </div>
+        <div class="note">
+            Note: This extension requires the VS Code Auto Reload extension to be installed and configured in Visual Studio Code for full functionality.
         </div>
     </div>
     <script src="popup.js"></script>
