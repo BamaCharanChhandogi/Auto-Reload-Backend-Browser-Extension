@@ -37,7 +37,7 @@ Visit your browser's extension store:
 
 - [Chrome Web Store](https://chrome.google.com/webstore/detail/auto-reload-backend/lpimhinbjbjlbodindddkbdmhnkdahim)
 - [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/auto-reload-backend/)
-- [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/auto-reload-backend/omdngbadgbohjfjhccgmlicmjccnjjbn)
+- [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/auto-reload-backend/nlpceegldemenpiaklaipmkhleigpegb)
 - [Safari Extensions](https://apps.apple.com/us/app/auto-reload-backend/id1630715631)
 
 ### Usage
